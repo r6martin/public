@@ -125,18 +125,28 @@
 
   <script>
     const steps = {
+      triageStart: {
+        title: "Is the podcast missing or is there a defect?",
+        team: "EdTech",
+        body: `
+          <p>Select the symptom described in the ticket.</p>
+        `,
+        choices: [
+          { label: "The podcast is missing", next: "start" },
+          { label: "There is a playback defect", next: "issue2Exit" }
+        ]
+      },
       start: {
         title: "Where is the podcast missing?",
         team: "EdTech",
         body: `
-          <p>Select the location described in the ticket. If the recording exists but has a playback defect, use the Issue 2 workflow instead.</p>
+          <p>Select the location described in the ticket.</p>
         `,
         choices: [
           { label: "Everywhere", next: "a0" },
           { label: "Podcast website only", next: "b1" },
           { label: "Canvas Media Gallery only", next: "b3" },
-          { label: "After the quarter concluded", next: "c" },
-          { label: "The recording exists but has a playback defect", next: "issue2Exit" }
+          { label: "After the quarter concluded", next: "c" }
         ]
       },
       a0: {
@@ -467,7 +477,7 @@
       }
     };
 
-    const startStep = "start";
+    const startStep = "triageStart";
     let history = [];
     let currentStep = startStep;
 
