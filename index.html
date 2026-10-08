@@ -1,0 +1,747 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Issue 1 Triage — Podcast Not Appearing</title>
+  <style>
+    :root {
+      --navy: #0b2545;
+      --blue: #00629b;
+      --blue-soft: #e8f2fa;
+      --green: #2e7d32;
+      --amber: #fff7e0;
+      --slate: #425466;
+      --border: #d9e2ec;
+      --bg: #f4f7fa;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--navy);
+      font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.5;
+    }
+
+    .shell {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 32px 20px 64px;
+    }
+
+    header {
+      margin-bottom: 24px;
+    }
+
+    .eyebrow {
+      color: var(--blue);
+      font-size: 13px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+    }
+
+    h1 {
+      margin: 6px 0 10px;
+      font-size: clamp(1.8rem, 4vw, 2.5rem);
+      letter-spacing: -.03em;
+    }
+
+    .intro {
+      max-width: 70ch;
+      color: var(--slate);
+      margin: 0;
+    }
+
+    .meta {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 10px;
+      margin-top: 20px;
+    }
+
+    .meta-card {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 12px 14px;
+    }
+
+    .meta-label {
+      display: block;
+      color: var(--slate);
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .06em;
+    }
+
+    .crumbs {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 6px;
+      margin: 22px 0 12px;
+      font-size: 14px;
+    }
+
+    .crumb {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      padding: 4px 10px;
+      color: var(--slate);
+      white-space: nowrap;
+    }
+
+    .crumb.current {
+      background: var(--blue);
+      border-color: var(--blue);
+      color: white;
+      font-weight: 700;
+    }
+
+    .crumb-separator { color: #8a9bad; }
+
+    .panel {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      box-shadow: 0 12px 30px rgba(11, 37, 69, .06);
+      overflow: hidden;
+    }
+
+    .panel-top {
+      padding: 24px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .step-team {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--blue-soft);
+      color: var(--blue);
+      border-radius: 999px;
+      padding: 5px 10px;
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .step-title {
+      margin: 12px 0 0;
+      font-size: clamp(1.25rem, 2.6vw, 1.65rem);
+      letter-spacing: -.02em;
+    }
+
+    .step-body { padding: 24px; }
+    .step-body h3 { margin: 18px 0 8px; font-size: 1rem; }
+    .step-body h3:first-child { margin-top: 0; }
+    .step-body p { margin: 0 0 12px; }
+    .step-body ul, .step-body ol { margin: 0 0 16px 20px; padding: 0; }
+    .step-body li { margin-bottom: 6px; }
+    .step-body li:last-child { margin-bottom: 0; }
+    .step-body code {
+      background: #f0f4f8;
+      border: 1px solid #e1e8f0;
+      border-radius: 4px;
+      padding: 1px 4px;
+      font-size: .92em;
+    }
+    .step-body a { color: var(--blue); }
+
+    .note {
+      background: var(--amber);
+      border: 1px solid #f0d38a;
+      border-radius: 8px;
+      padding: 10px 12px;
+      margin: 0 0 16px;
+      color: #5d4a11;
+    }
+
+    .choices {
+      display: grid;
+      gap: 10px;
+      margin-top: 20px;
+    }
+
+    .choice {
+      width: 100%;
+      min-height: 52px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      text-align: left;
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 14px 16px;
+      color: var(--navy);
+      font: inherit;
+      font-weight: 650;
+      cursor: pointer;
+      transition: border-color .15s ease, box-shadow .15s ease, transform .15s ease;
+    }
+
+    .choice:hover,
+    .choice:focus-visible {
+      border-color: var(--blue);
+      box-shadow: 0 0 0 3px rgba(0, 98, 155, .14);
+      outline: none;
+      transform: translateY(-1px);
+    }
+
+    .choice span:last-child {
+      color: var(--blue);
+      font-weight: 800;
+    }
+
+    .controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      padding: 20px 24px;
+      border-top: 1px solid var(--border);
+      background: #fbfcfe;
+    }
+
+    .button {
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: white;
+      color: var(--navy);
+      padding: 9px 14px;
+      font: inherit;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .button:hover,
+    .button:focus-visible {
+      border-color: var(--blue);
+      color: var(--blue);
+      outline: none;
+    }
+
+    .button:disabled {
+      color: #8a9bad;
+      border-color: #e7ecf2;
+      background: #f8fafc;
+      cursor: not-allowed;
+    }
+
+    .refs {
+      border-top: 1px solid var(--border);
+      padding: 16px 24px 20px;
+    }
+
+    .refs summary {
+      cursor: pointer;
+      font-weight: 700;
+    }
+
+    .refs ul {
+      margin: 12px 0 0 20px;
+      color: var(--slate);
+    }
+
+    footer {
+      margin-top: 24px;
+      color: var(--slate);
+      font-size: 14px;
+    }
+
+    footer a { color: var(--blue); }
+
+    @media (max-width: 520px) {
+      .shell { padding: 20px 14px 48px; }
+      .panel-top, .step-body, .controls, .refs { padding-left: 18px; padding-right: 18px; }
+      .choice { font-size: .95rem; }
+    }
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <header>
+      <p class="eyebrow">Lecture Capture · Guided Triage</p>
+      <h1>Podcast Not Appearing</h1>
+      <p class="intro">This is the first interactive version of <strong>Issue 1: Podcast not appearing in Canvas or the Podcast website</strong>. Each screen shows one triage step.</p>
+      <div class="meta">
+        <div class="meta-card"><span class="meta-label">Owner at start</span>EdTech</div>
+        <div class="meta-card"><span class="meta-label">Version</span>Issue 1 only · v0.1</div>
+        <div class="meta-card"><span class="meta-label">Source</span>ETS Confluence + Robin’s instructions</div>
+      </div>
+    </header>
+
+    <nav class="crumbs" id="crumbs" aria-label="Triage path"></nav>
+
+    <section class="panel" aria-live="polite">
+      <div class="panel-top">
+        <span class="step-team" id="team">EdTech</span>
+        <h2 class="step-title" id="title">Where is the podcast missing?</h2>
+      </div>
+      <div class="step-body" id="body"></div>
+      <div class="choices" id="choices"></div>
+      <div class="controls">
+        <button class="button" id="backButton" type="button">Back</button>
+        <button class="button" id="restartButton" type="button">Restart</button>
+        <button class="button" id="printButton" type="button">Print</button>
+      </div>
+      <details class="refs" id="refsPanel">
+        <summary>References</summary>
+        <ul id="refs"></ul>
+      </details>
+    </section>
+
+    <footer>
+      <p>See <a href="lecture_capture_triage.md">lecture_capture_triage.md</a> for the full markdown workflow and source documentation.</p>
+      <noscript><p>This guided triage page requires JavaScript.</p></noscript>
+    </footer>
+  </main>
+
+  <script>
+    const steps = {
+      start: {
+        title: "Where is the podcast missing?",
+        team: "EdTech",
+        body: `
+          <p>Select the location described in the ticket. If the recording exists but has a playback defect, use the Issue 2 workflow instead.</p>
+        `,
+        choices: [
+          { label: "Everywhere", next: "a0" },
+          { label: "Podcast website only", next: "b1" },
+          { label: "Canvas Media Gallery only", next: "b3" },
+          { label: "After the quarter concluded", next: "c" },
+          { label: "The recording exists but has a playback defect", next: "issue2Exit" }
+        ]
+      },
+      a0: {
+        title: "A0 — Podcast schedule and expectation check",
+        team: "EdTech",
+        body: `
+          <p>Confirm the user’s expected meeting, room, date/time, and quarter.</p>
+          <p>Compare it with:</p>
+          <ul>
+            <li><a href="https://podcast.ucsd.edu/admin/Podcasts.aspx" target="_blank" rel="noopener">Manage Podcasts</a> — agreement schedule.</li>
+            <li><a href="https://podcast.ucsd.edu/admin/rooms.aspx" target="_blank" rel="noopener">Manage Rooms / Manage Computers</a> — room schedule fetch and source address.</li>
+          </ul>
+        `,
+        choices: [
+          { label: "Expectation and system schedule match", next: "a1" },
+          { label: "Expectation and system schedule differ", next: "scheduleIssue" }
+        ],
+        refs: [
+          { label: "Admin Tools", url: "https://ucsdcollab.atlassian.net/wiki/spaces/ETS/pages/49776925/Podcast+Admin+Tools%3A+Manage+Requests%2C+Rooms%2C+Recordings%2C+and+Publishing" }
+        ]
+      },
+      scheduleIssue: {
+        title: "Schedule mismatch found",
+        team: "EdTech",
+        body: `
+          <p>Use the <strong>Podcast schedule not correct</strong> workflow before continuing Issue 1.</p>
+          <p>After the schedule has been corrected, return to A0 and recheck the user’s expectation against the system schedule.</p>
+        `,
+        choices: [
+          { label: "Return to A0 after the schedule is corrected", next: "a0" }
+        ]
+      },
+      a1: {
+        title: "A1 — Kaltura upload",
+        team: "EdTech first · ITS-KalturaVideo for KMC · ATI for scripts/config",
+        body: `
+          <p>First allow for the documented multi-hour delay that can occur when Kaltura is slow to ingest recordings.</p>
+          <h3>Status-page checks</h3>
+          <ol>
+            <li>Use the <a href="https://podcast.ucsd.edu/admin/KalturaStatus.aspx" target="_blank" rel="noopener">Kaltura Status Page</a> to determine whether the problem affects many files or one file.</li>
+            <li><strong>Many files pending:</strong> check the EdTech Tools Known Errors and Updates channel. Treat this as a likely service outage or a <code>kaltura-sync</code> unhandled exception.</li>
+            <li><strong>Many files for one class:</strong> check the agreement in <strong>Manage Podcasts → Manage Agreements</strong>. If <code>professor_name</code>, <code>username</code>, and <code>email</code> are blank, add an AD username for the course in <a href="https://podcast.ucsd.edu/admin/KalturaMappings.aspx" target="_blank" rel="noopener">Kaltura Mappings</a>. The fix may not upload until the next recording; if urgent, ATI can run a manual sync.</li>
+            <li><strong>Single lecture with an offline entry:</strong> click <strong>Redo</strong> on the Kaltura Status Page. If more than 24 hours have passed, escalate to ITS-KalturaVideo to redo it through the KMC.</li>
+          </ol>
+          <h3>If the meeting is not listed</h3>
+          <p>Verify the course is listed in <a href="https://podcast.ucsd.edu/admin/KalturaMappings.aspx" target="_blank" rel="noopener">Kaltura Mappings</a>.</p>
+          <h3>If Pending has not progressed</h3>
+          <p>After more than 15 minutes, and if ITS-KalturaVideo has not identified a Kaltura-side/KMC issue, ATI should check <code>~/log/kaltura-sync.log</code> on <code>lcs2-admin</code>.</p>
+          <h3>If Running or Complete</h3>
+          <p>Identify the first blank column:</p>
+          <ul>
+            <li><strong>Entry ID blank:</strong> likely failed to create the Kaltura entry; check logs.</li>
+            <li><strong>Upload Started blank:</strong> likely failed to determine the upload file or URL.</li>
+            <li><strong>Upload Completed blank:</strong> likely upload or post-upload processing did not complete; click <strong>Re-Do</strong> if stuck, such as in Pre-Convert.</li>
+            <li><strong>Cat blank:</strong> verify the category in Kaltura Mappings and the entry in Kaltura.</li>
+          </ul>
+          <h3>Other conditions</h3>
+          <ul>
+            <li>If <strong>Attempts</strong> exceeds five errors, the meeting is ignored on the next sync; click <strong>Redo</strong>.</li>
+            <li>If the issue is sync timing or older files, ATI can safely extend <code>upload_range</code> in <code>~/kaltura-sync/config.ini</code>. Set it back to <code>1440</code> after remediation.</li>
+          </ul>
+        `,
+        choices: [
+          { label: "Kaltura-side issue identified and fixed", next: "retest" },
+          { label: "No Kaltura-side issue remains", next: "a2" }
+        ],
+        refs: [
+          { label: "Troubleshooting: Kaltura uploads stuck / Canvas course missing recording(s)", url: "https://ucsdcollab.atlassian.net/wiki/spaces/ETS/pages/49777330/Troubleshooting%3A+Kaltura+uploads+stuck+%2F+Canvas+course+missing+recording%28s%29" }
+        ]
+      },
+      a2: {
+        title: "A2 — Was the recording post-processed into usable media?",
+        team: "EdTech checks status · ATI for EKS/post-processing",
+        body: `
+          <h3>Post-processing checks</h3>
+          <ol>
+            <li>Use the <a href="https://podcast.ucsd.edu/admin/ExtronStatus.aspx" target="_blank" rel="noopener">Extron Postprocessing Status page</a> to verify that the meeting’s recording and post-processing completed and that the lecture link shows usable content.</li>
+            <li>If no recordings are processing at all, escalate to ATI to determine whether EKS processing failed. Use the <a href="https://ucsdcollab.atlassian.net/wiki/spaces/ETS/pages/3309994010/Post-processing+on+ITS+EKS+cluster" target="_blank" rel="noopener">Post-processing on ITS EKS cluster</a> page.</li>
+            <li>For repeated or long-running EKS failures, ATI should inspect the production Splunk queries for launcher, child postprocessor, and init-container logs documented on the EKS page.</li>
+            <li>If the recording was processed but has a dualcast playback defect in Kaltura, test whether the non-dualcast versions play from the icons above the player; otherwise use the Issue 2 workflow.</li>
+          </ol>
+          <div class="note">If EKS remediation succeeds, return to A1 to confirm the Kaltura upload.</div>
+        `,
+        choices: [
+          { label: "Post-processing is complete and usable", next: "a3" },
+          { label: "No or unknown after EKS checks", next: "a3" }
+        ],
+        refs: [
+          { label: "Extron troubleshooting", url: "https://ucsdcollab.atlassian.net/wiki/spaces/ETS/pages/49776730/Troubleshooting%3A+Podcast+not+available+due+to+Extron+recording+not+processing" },
+          { label: "Post-processing on ITS EKS cluster", url: "https://ucsdcollab.atlassian.net/wiki/spaces/ETS/pages/3309994010/Post-processing+on+ITS+EKS+cluster" }
+        ]
+      },
+      a3: {
+        title: "A3 — Did the recording publish from the SMP to Qumulo?",
+        team: "EdTech first · Classroom Support · ATI for transfer infrastructure",
+        body: `
+          <h3>Qumulo transfer and publishing checks</h3>
+          <ol>
+            <li>Connect to the Qumulo CIFS share at <code>smb://qs-its.sdsc.edu/its-ats-podcast-storage/</code>.</li>
+            <li>Check <code>INBOX/&lt;recorder-name&gt;</code> for a recording directory matching the missing class. For recordings older than seven days, also check <code>Archive/YYYY/MM/DD</code>.</li>
+            <li>If the directory exists, verify that the raw files are present, growing as expected, and include <code>xfer_complete</code>. Use partial-content recovery where documented.</li>
+            <li>If the directory is absent or incomplete, inspect the event in the SMP’s Recording Calendar. Use <strong>Retransfer</strong> to the current publish destination or manually publish the recording directory from the SMP.</li>
+            <li>If many recorders are affected, escalate to ATI for <code>checkQumulo.pl</code>.</li>
+          </ol>
+          <div class="note">If transfer remediation succeeds, return to A2 after confirming that the transfer is complete and the recording has usable content.</div>
+        `,
+        choices: [
+          { label: "Recording published to Qumulo", next: "a4" },
+          { label: "No or unknown after transfer checks", next: "a4" }
+        ],
+        refs: [
+          { label: "Extron troubleshooting", url: "https://ucsdcollab.atlassian.net/wiki/spaces/ETS/pages/49776730/Troubleshooting%3A+Podcast+not+available+due+to+Extron+recording+not+processing" },
+          { label: "Connect to Qumulo to check on raw recordings", url: "https://ucsdcollab.atlassian.net/wiki/spaces/ETS/pages/1648427314/Process+Connect+to+Qumulo+to+check+on+raw+recordings" }
+        ]
+      },
+      a4: {
+        title: "A4 — Did the SMP record as scheduled?",
+        team: "EdTech first · Classroom Support · ATI for recurring unit recovery",
+        body: `
+          <h3>Scheduling, capture, and recorder checks</h3>
+          <ol>
+            <li>Open the SMP management interface for the scheduled room.</li>
+            <li>In <strong>Scheduled Events → Recording Calendar</strong>, verify whether the class event exists and what status it shows.</li>
+            <li>If the meeting is absent, verify the agreement and recording schedule:
+              <ul>
+                <li><a href="https://podcast.ucsd.edu/admin/Podcasts.aspx" target="_blank" rel="noopener">Manage Podcasts</a> — agreement schedule.</li>
+                <li><a href="https://podcast.ucsd.edu/admin/rooms.aspx" target="_blank" rel="noopener">Manage Rooms / Manage Computers</a> — schedule fetch and source address.</li>
+              </ul>
+              If the class time or room changed, use the <strong>Podcast schedule not correct</strong> workflow before continuing.
+            </li>
+            <li>If the room did not record at all, contact Classroom Support using the documented real-time or non-urgent paths.</li>
+            <li>For a recurring unit problem, try <strong>Delete Content</strong> for disk errors, <strong>Net-Safe Reset</strong> and reload configuration, or replace the SMP. SMP installation/swap is coordinated by ATI with Classroom Support.</li>
+            <li>If the recording state indicates an SMP crash, use the <strong>Two recordings / Upload Skipped</strong> recovery branch and remove or merge the corrupted first recording.</li>
+            <li>If the status is blank or file size is <code>NaN</code>, verify the recording files on the SMP; skip only if the recording failed.</li>
+            <li>If the recording is a dualcast request but the room is not configured for dualcast, temporarily set the Extron Channel Setup to <code>A=&gt;Screencast,B=&gt;Video</code> and the Extron Config to <code>Dualcast - Video Right</code>, then restore the original settings after processing.</li>
+          </ol>
+        `,
+        choices: [
+          { label: "SMP recorded as scheduled", next: "b4" },
+          { label: "No or unknown after recorder checks", next: "recorderIssue" }
+        ],
+        refs: [
+          { label: "Extron troubleshooting", url: "https://ucsdcollab.atlassian.net/wiki/spaces/ETS/pages/49776730/Troubleshooting%3A+Podcast+not+available+due+to+Extron+recording+not+processing" }
+        ]
+      },
+      recorderIssue: {
+        title: "Recorder issue requires Classroom Support / ATI",
+        team: "Classroom Support · ATI",
+        body: `
+          <p>Use the documented real-time or non-urgent Classroom Support paths, or escalate to ATI for recurring unit recovery, SMP swaps, or <code>lcs2-admin</code> infrastructure work.</p>
+          <p>After the recorder issue is remediated, return to A3 to verify the Qumulo transfer.</p>
+        `,
+        choices: [
+          { label: "Return to A3 after remediation", next: "a3" }
+        ],
+        refs: [
+          { label: "Classroom Recorders", url: "https://ucsdcollab.atlassian.net/wiki/spaces/ETS/pages/49775100/Lecture+Capture%3A+Classroom+Recorders" }
+        ]
+      },
+      b1: {
+        title: "B1 — Current-term visibility and publishing controls",
+        team: "EdTech",
+        body: `
+          <ol>
+            <li>In <a href="https://podcast.ucsd.edu/admin/Podcasts.aspx" target="_blank" rel="noopener">Manage Podcasts</a>, verify the podcast is <code>Available</code>.</li>
+            <li>Verify the class password/access restriction is appropriate.</li>
+            <li>Use <strong>Edit Mappings</strong> to check the Canvas course/course ID mapping.</li>
+            <li>Use <a href="https://podcast.ucsd.edu/admin/Podcasts.aspx" target="_blank" rel="noopener">Add/Remove Users</a> for individual access or cleanup after a mapping problem.</li>
+            <li>Use <a href="https://podcast.ucsd.edu/admin/Podcasts.aspx" target="_blank" rel="noopener">Impersonate</a> to reproduce what the affected user sees.</li>
+          </ol>
+        `,
+        choices: [
+          { label: "Issue resolved", next: "retest" },
+          { label: "Problem is limited to one user", next: "b2" },
+          { label: "Still invisible after these controls", next: "b5" }
+        ],
+        refs: [
+          { label: "Admin Tools", url: "https://ucsdcollab.atlassian.net/wiki/spaces/ETS/pages/49776925/Podcast+Admin+Tools%3A+Manage+Requests%2C+Rooms%2C+Recordings%2C+and+Publishing" },
+          { label: "Impersonate a user", url: "https://ucsdcollab.atlassian.net/wiki/spaces/ETS/pages/49776982/Process%3A+Impersonate+a+user+in+podcast.ucsd.edu" }
+        ]
+      },
+      b2: {
+        title: "B2 — One-user access problem",
+        team: "EdTech",
+        body: `
+          <ol>
+            <li>Confirm the affected user’s access in <a href="https://podcast.ucsd.edu/admin/Podcasts.aspx" target="_blank" rel="noopener">Add/Remove Users</a>.</li>
+            <li>Check the Canvas mapping in <strong>Edit Mappings</strong>.</li>
+            <li>Use <a href="https://podcast.ucsd.edu/admin/Podcasts.aspx" target="_blank" rel="noopener">Impersonate</a> to reproduce the user’s view.</li>
+          </ol>
+        `,
+        choices: [
+          { label: "Issue resolved", next: "retest" },
+          { label: "Mapping itself is wrong", next: "b3" },
+          { label: "Still unresolved", next: "b5" }
+        ],
+        refs: [
+          { label: "Admin Tools", url: "https://ucsdcollab.atlassian.net/wiki/spaces/ETS/pages/49776925/Podcast+Admin+Tools%3A+Manage+Requests%2C+Rooms%2C+Recordings%2C+and+Publishing" }
+        ]
+      },
+      b3: {
+        title: "B3 — Canvas course changed, split, merged, or mapped incorrectly",
+        team: "EdTech · ITS-KalturaVideo for KMC work",
+        body: `
+          <ol>
+            <li>In <a href="https://podcast.ucsd.edu/admin/Podcasts.aspx" target="_blank" rel="noopener">Manage Podcasts → Edit Mappings</a>, add the new Canvas course mapping and remove the old one.</li>
+            <li>From <a href="https://podcast.ucsd.edu/admin/KalturaMappings.aspx" target="_blank" rel="noopener">Manage Kaltura Settings / Kaltura Mappings</a>, modify the Kaltura mapping and enter the correct LMS Course ID.</li>
+            <li>Clear the existing Kaltura Categories and Kaltura Playlist fields so they are rebuilt on the next recording upload.</li>
+            <li>Move completed recordings:
+              <ul>
+                <li><strong>One or two recordings:</strong> impersonate the instructor and use <strong>My Media</strong> in Canvas.</li>
+                <li><strong>Many recordings:</strong> ITS-KalturaVideo uses the KMC to search the old channel/category, view entries, add/remove categories in bulk, and publish to the correct Media Gallery.</li>
+              </ul>
+            </li>
+            <li>Delete or clean up the old playlist as documented.</li>
+          </ol>
+        `,
+        choices: [
+          { label: "Issue resolved", next: "retest" },
+          { label: "Still invisible after mapping work", next: "b5" }
+        ],
+        refs: [
+          { label: "Map a Podcast to a new Canvas course", url: "https://ucsdcollab.atlassian.net/wiki/spaces/ETS/pages/49776704/Process%3A+Map+a+Podcast+to+a+new+Canvas+course%2C+when+combining+or+splitting+Canvas+courses" }
+        ]
+      },
+      b4: {
+        title: "B4 — Instructor removed, unpublished, or deleted the video",
+        team: "EdTech · consult the instructor only",
+        body: `
+          <h3>Unpublished from Media Gallery</h3>
+          <ul>
+            <li>Once unpublished, the video is unavailable to students in both Canvas and the Podcast website.</li>
+            <li>After it is republished to the course Media Gallery with the same Kaltura entry ID, students can view it again in Canvas and it republishes on the Podcast website.</li>
+          </ul>
+          <h3>Deleted from the course Media Gallery</h3>
+          <ol>
+            <li>Open the <a href="https://podcast.ucsd.edu/admin/KalturaStatus.aspx" target="_blank" rel="noopener">Kaltura Status Page</a>.</li>
+            <li>Increase the number of days shown until the old file appears.</li>
+            <li>Confirm the entry ID is red/strike-through, which marks the entry offline.</li>
+            <li>Click <strong>Redo</strong> to clear the old entry/upload metadata.</li>
+            <li>Allow KalturaSync to run, or run <code>--UploadCourses</code> for that podcast ID.</li>
+          </ol>
+        `,
+        choices: [
+          { label: "Issue resolved after republish or redo", next: "retest" }
+        ],
+        refs: [
+          { label: "When an instructor removes video", url: "https://ucsdcollab.atlassian.net/wiki/spaces/ETS/pages/235930767/Support%3A+When+an+instructor+removes+video+from+Kaltura+and+podcast.ucsd.edu" },
+          { label: "Re-upload a deleted video", url: "https://ucsdcollab.atlassian.net/wiki/spaces/ETS/pages/250052833/Process%3A+Re-upload+a+deleted+lecture+capture+video+to+Kaltura" }
+        ]
+      },
+      b5: {
+        title: "B5 — Kaltura mapping, entry, and category troubleshooting",
+        team: "EdTech first · ITS-KalturaVideo for KMC work",
+        body: `
+          <p>Use this branch only when the recording successfully reached Kaltura but is not visible in the expected destination because of its mapping, entry state, or category/playlist assignment.</p>
+          <ol>
+            <li>Use the <a href="https://podcast.ucsd.edu/admin/KalturaStatus.aspx" target="_blank" rel="noopener">Kaltura Status Page</a> to confirm that the recording has a valid Kaltura entry.</li>
+            <li>Use <a href="https://podcast.ucsd.edu/admin/KalturaMappings.aspx" target="_blank" rel="noopener">Kaltura Mappings</a> to verify the course, category, and playlist settings.</li>
+            <li>If the category or playlist is missing or incorrect, update the mapping so future uploads publish correctly.</li>
+            <li>If the entry is offline, use <strong>Redo</strong> on the Kaltura Status Page, or escalate to ITS-KalturaVideo for KMC remediation.</li>
+          </ol>
+        `,
+        choices: [
+          { label: "Issue resolved", next: "retest" },
+          { label: "No valid entry or upload still stuck", next: "a2" }
+        ],
+        refs: [
+          { label: "Admin Tools", url: "https://ucsdcollab.atlassian.net/wiki/spaces/ETS/pages/49776925/Podcast+Admin+Tools%3A+Manage+Requests%2C+Rooms%2C+Recordings%2C+and+Publishing" }
+        ]
+      },
+      c: {
+        title: "C — After quarter concluded",
+        team: "Deprecated · EdTech/ATS legacy",
+        body: `
+          <div class="note">As of Fall 2026, this workflow is deprecated. Direct instructors to <a href="https://mediaspace.ucsd.edu" target="_blank" rel="noopener">MediaSpace</a> for sharing after the quarter has ended. MediaSpace is part of the Kaltura service.</div>
+          <h3>Legacy process</h3>
+          <ol>
+            <li>Verify whether the instructor wants access restored for everyone or only one student.</li>
+            <li>If one student only, the documented alternatives are:
+              <ul>
+                <li>Provide the instructor a download link to the archive.</li>
+                <li>Use Canvas <strong>Extended Course Access</strong> if the recordings were not deleted from Kaltura.</li>
+              </ul>
+            </li>
+            <li>To restore for everyone, verify an archive exists on <strong>Edit Podcast</strong>, restore from archive if needed, set the podcast <code>Available</code>, and set the primary agreement’s <strong>After Quarter</strong> setting to <strong>Keep Online</strong>.</li>
+            <li>To conclude access, set the primary agreement’s <strong>After Quarter</strong> setting and make the podcast unavailable, following the source page.</li>
+          </ol>
+        `,
+        choices: [
+          { label: "Done", next: "retest" }
+        ],
+        refs: [
+          { label: "Extend or Conclude podcast access", url: "https://ucsdcollab.atlassian.net/wiki/spaces/ETS/pages/49777730/Process%3A+Extend+or+Conclude+podcast+access+after+quarter+ends" }
+        ]
+      },
+      issue2Exit: {
+        title: "Use Issue 2 instead",
+        team: "Exit Issue 1",
+        body: `
+          <p>The recording exists but has a playback defect. Use the <strong>Issue 2 — Published Podcast Playback Issue</strong> workflow.</p>
+        `,
+        choices: [
+          { label: "Start Issue 1 over", next: "start" }
+        ]
+      },
+      retest: {
+        title: "Retest user visibility",
+        team: "EdTech",
+        body: `
+          <p>Reproduce the user’s view and confirm that the recording is now visible in the expected destination.</p>
+          <p>If it is still not visible, return to the relevant branch and continue from the last step that did not identify a cause.</p>
+        `,
+        choices: [
+          { label: "Resolved", next: "resolved" },
+          { label: "Still not visible", next: "start" }
+        ]
+      },
+      resolved: {
+        title: "Issue resolved",
+        team: "End",
+        body: `
+          <p>The recording is visible in the expected destination. Document the resolution in the ticket.</p>
+        `,
+        choices: [
+          { label: "Start a new triage", next: "start" }
+        ]
+      }
+    };
+
+    const startStep = "start";
+    let history = [];
+    let currentStep = startStep;
+
+    const crumbs = document.getElementById("crumbs");
+    const team = document.getElementById("team");
+    const title = document.getElementById("title");
+    const body = document.getElementById("body");
+    const choices = document.getElementById("choices");
+    const refsPanel = document.getElementById("refsPanel");
+    const refsList = document.getElementById("refs");
+    const backButton = document.getElementById("backButton");
+
+    function render(stepId) {
+      const step = steps[stepId];
+      currentStep = stepId;
+
+      document.title = `${step.title} — Issue 1 Triage`;
+      team.textContent = step.team;
+      title.textContent = step.title;
+      body.innerHTML = step.body || "";
+
+      choices.innerHTML = "";
+      (step.choices || []).forEach(choice => {
+        const button = document.createElement("button");
+        button.type = "button";
+        button.className = "choice";
+        button.innerHTML = `<span>${choice.label}</span><span aria-hidden="true">→</span>`;
+        button.addEventListener("click", () => {
+          history.push(currentStep);
+          render(choice.next);
+          window.scrollTo({ top: 0, behavior: "smooth" });
+        });
+        choices.appendChild(button);
+      });
+
+      refsList.innerHTML = "";
+      const references = step.refs || [];
+      if (references.length === 0) {
+        refsPanel.hidden = true;
+      } else {
+        refsPanel.hidden = false;
+        refsPanel.open = false;
+        references.forEach(ref => {
+          const item = document.createElement("li");
+          const link = document.createElement("a");
+          link.href = ref.url;
+          link.target = "_blank";
+          link.rel = "noopener";
+          link.textContent = ref.label;
+          item.appendChild(link);
+          refsList.appendChild(item);
+        });
+      }
+
+      backButton.disabled = history.length === 0;
+      renderCrumbs();
+    }
+
+    function renderCrumbs() {
+      crumbs.innerHTML = "";
+      const path = [...history, currentStep];
+      path.forEach((stepId, index) => {
+        const isCurrent = index === path.length - 1;
+        const item = document.createElement("span");
+        item.className = isCurrent ? "crumb current" : "crumb";
+        item.textContent = steps[stepId].title;
+        crumbs.appendChild(item);
+        if (!isCurrent) {
+          const separator = document.createElement("span");
+          separator.className = "crumb-separator";
+          separator.textContent = "→";
+          crumbs.appendChild(separator);
+        }
+      });
+    }
+
+    backButton.addEventListener("click", () => {
+      if (!history.length) return;
+      currentStep = history.pop();
+      render(currentStep);
+    });
+
+    document.getElementById("restartButton").addEventListener("click", () => {
+      history = [];
+      render(startStep);
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    });
+
+    document.getElementById("printButton").addEventListener("click", () => {
+      refsPanel.open = true;
+      window.print();
+    });
+
+    render(startStep);
+  </script>
+</body>
+</html>
