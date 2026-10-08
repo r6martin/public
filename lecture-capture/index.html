@@ -1,307 +1,127 @@
-<!doctype html>
-<html lang="en">
+<!DOCTYPE html>
+<html lang="en-US" class="no-js">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Issue 1 Triage — Podcast Not Appearing</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Guided triage for a lecture capture podcast that is not appearing in Canvas or the Podcast website.">
+  <title>Issue 1 Triage — Lecture Capture</title>
+  <link href="https://cdn.ucsd.edu/cms/decorator-5/styles/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.ucsd.edu/cms/decorator-5/styles/base.min.css" rel="stylesheet">
   <style>
-    :root {
-      --navy: #0b2545;
-      --blue: #00629b;
-      --blue-soft: #e8f2fa;
-      --green: #2e7d32;
-      --amber: #fff7e0;
-      --slate: #425466;
-      --border: #d9e2ec;
-      --bg: #f4f7fa;
-    }
-
-    * { box-sizing: border-box; }
-
-    body {
-      margin: 0;
-      background: var(--bg);
-      color: var(--navy);
-      font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      line-height: 1.5;
-    }
-
-    .shell {
-      max-width: 960px;
-      margin: 0 auto;
-      padding: 32px 20px 64px;
-    }
-
-    header {
-      margin-bottom: 24px;
-    }
-
-    .eyebrow {
-      color: var(--blue);
-      font-size: 13px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: .08em;
-    }
-
-    h1 {
-      margin: 6px 0 10px;
-      font-size: clamp(1.8rem, 4vw, 2.5rem);
-      letter-spacing: -.03em;
-    }
-
-    .intro {
-      max-width: 70ch;
-      color: var(--slate);
-      margin: 0;
-    }
-
-    .meta {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 10px;
-      margin-top: 20px;
-    }
-
-    .meta-card {
-      background: white;
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 12px 14px;
-    }
-
-    .meta-label {
-      display: block;
-      color: var(--slate);
-      font-size: 12px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: .06em;
-    }
-
-    .crumbs {
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      gap: 6px;
-      margin: 22px 0 12px;
-      font-size: 14px;
-    }
-
-    .crumb {
-      background: white;
-      border: 1px solid var(--border);
-      border-radius: 999px;
-      padding: 4px 10px;
-      color: var(--slate);
-      white-space: nowrap;
-    }
-
-    .crumb.current {
-      background: var(--blue);
-      border-color: var(--blue);
-      color: white;
-      font-weight: 700;
-    }
-
-    .crumb-separator { color: #8a9bad; }
-
-    .panel {
-      background: white;
-      border: 1px solid var(--border);
-      border-radius: 14px;
-      box-shadow: 0 12px 30px rgba(11, 37, 69, .06);
-      overflow: hidden;
-    }
-
-    .panel-top {
-      padding: 24px;
-      border-bottom: 1px solid var(--border);
-    }
-
-    .step-team {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      background: var(--blue-soft);
-      color: var(--blue);
-      border-radius: 999px;
-      padding: 5px 10px;
-      font-size: 13px;
-      font-weight: 700;
-    }
-
-    .step-title {
-      margin: 12px 0 0;
-      font-size: clamp(1.25rem, 2.6vw, 1.65rem);
-      letter-spacing: -.02em;
-    }
-
-    .step-body { padding: 24px; }
-    .step-body h3 { margin: 18px 0 8px; font-size: 1rem; }
-    .step-body h3:first-child { margin-top: 0; }
-    .step-body p { margin: 0 0 12px; }
-    .step-body ul, .step-body ol { margin: 0 0 16px 20px; padding: 0; }
-    .step-body li { margin-bottom: 6px; }
-    .step-body li:last-child { margin-bottom: 0; }
-    .step-body code {
-      background: #f0f4f8;
-      border: 1px solid #e1e8f0;
-      border-radius: 4px;
-      padding: 1px 4px;
-      font-size: .92em;
-    }
-    .step-body a { color: var(--blue); }
-
-    .note {
-      background: var(--amber);
-      border: 1px solid #f0d38a;
-      border-radius: 8px;
-      padding: 10px 12px;
-      margin: 0 0 16px;
-      color: #5d4a11;
-    }
-
-    .choices {
+    #choices {
       display: grid;
       gap: 10px;
       margin-top: 20px;
     }
 
-    .choice {
-      width: 100%;
-      min-height: 52px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-      text-align: left;
-      background: white;
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 14px 16px;
-      color: var(--navy);
-      font: inherit;
-      font-weight: 650;
-      cursor: pointer;
-      transition: border-color .15s ease, box-shadow .15s ease, transform .15s ease;
-    }
-
-    .choice:hover,
-    .choice:focus-visible {
-      border-color: var(--blue);
-      box-shadow: 0 0 0 3px rgba(0, 98, 155, .14);
-      outline: none;
-      transform: translateY(-1px);
-    }
-
-    .choice span:last-child {
-      color: var(--blue);
-      font-weight: 800;
-    }
-
-    .controls {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      padding: 20px 24px;
-      border-top: 1px solid var(--border);
-      background: #fbfcfe;
-    }
-
-    .button {
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      background: white;
-      color: var(--navy);
-      padding: 9px 14px;
-      font: inherit;
-      font-weight: 700;
-      cursor: pointer;
-    }
-
-    .button:hover,
-    .button:focus-visible {
-      border-color: var(--blue);
-      color: var(--blue);
-      outline: none;
-    }
-
-    .button:disabled {
-      color: #8a9bad;
-      border-color: #e7ecf2;
-      background: #f8fafc;
-      cursor: not-allowed;
-    }
-
-    .refs {
-      border-top: 1px solid var(--border);
-      padding: 16px 24px 20px;
-    }
-
-    .refs summary {
-      cursor: pointer;
-      font-weight: 700;
-    }
-
-    .refs ul {
-      margin: 12px 0 0 20px;
-      color: var(--slate);
-    }
-
-    footer {
-      margin-top: 24px;
-      color: var(--slate);
-      font-size: 14px;
-    }
-
-    footer a { color: var(--blue); }
-
-    @media (max-width: 520px) {
-      .shell { padding: 20px 14px 48px; }
-      .panel-top, .step-body, .controls, .refs { padding-left: 18px; padding-right: 18px; }
-      .choice { font-size: .95rem; }
+    #crumbs li[aria-current="page"] {
+      color: #000;
     }
   </style>
 </head>
 <body>
-  <main class="shell">
-    <header>
-      <p class="eyebrow">Lecture Capture · Guided Triage</p>
-      <h1>Podcast Not Appearing</h1>
-      <p class="intro">This is the first interactive version of <strong>Issue 1: Podcast not appearing in Canvas or the Podcast website</strong>. Each screen shows one triage step.</p>
-      <div class="meta">
-        <div class="meta-card"><span class="meta-label">Owner at start</span>EdTech</div>
-        <div class="meta-card"><span class="meta-label">Version</span>Issue 1 only · v0.1</div>
-        <div class="meta-card"><span class="meta-label">Source</span>ETS Confluence + Robin’s instructions</div>
+  <header class="layout-header">
+    <a class="sr-only" href="#main-content">Skip to main content</a>
+    <section class="layout-title" aria-label="Lecture Capture Triage">
+      <div class="layout-container container">
+        <a class="title-header title-header-large" href="/public/lecture-capture/">Lecture Capture Triage</a>
+        <a class="title-header title-header-short" href="/public/lecture-capture/">LC Triage</a>
+        <a class="title-logo" href="https://www.ucsd.edu">UC San Diego</a>
       </div>
-    </header>
-
-    <nav class="crumbs" id="crumbs" aria-label="Triage path"></nav>
-
-    <section class="panel" aria-live="polite">
-      <div class="panel-top">
-        <span class="step-team" id="team">EdTech</span>
-        <h2 class="step-title" id="title">Where is the podcast missing?</h2>
-      </div>
-      <div class="step-body" id="body"></div>
-      <div class="choices" id="choices"></div>
-      <div class="controls">
-        <button class="button" id="backButton" type="button">Back</button>
-        <button class="button" id="restartButton" type="button">Restart</button>
-        <button class="button" id="printButton" type="button">Print</button>
-      </div>
-      <details class="refs" id="refsPanel">
-        <summary>References</summary>
-        <ul id="refs"></ul>
-      </details>
     </section>
+  </header>
 
-    <footer>
-      <p>See <a href="lecture_capture_triage.md">lecture_capture_triage.md</a> for the full markdown workflow and source documentation.</p>
-      <noscript><p>This guided triage page requires JavaScript.</p></noscript>
-    </footer>
+  <nav class="navbar navbar-default navbar-static-top" role="navigation" aria-label="Primary">
+    <div class="container">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#site-nav" aria-expanded="false" aria-controls="site-nav">
+          <span class="sr-only">Toggle navigation</span>
+          <div class="col-sm-1 mobile-nav-bars">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </div>
+          <div class="col-sm-1 mobile-nav-icon">MENU</div>
+        </button>
+        <div class="col-sm-4 pull-right visible-xs-block">
+          <img src="https://cdn.ucsd.edu/developer/decorator/5.0.2/img/ucsd-footer-logo-white.png" alt="UC San Diego" class="img-responsive header-logo" />
+        </div>
+      </div>
+      <div class="collapse navbar-collapse" id="site-nav">
+        <ul class="nav navbar-nav">
+          <li class="active"><a href="#main-content">Issue 1</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <main class="layout-main" id="main-content" role="main">
+    <div class="container">
+      <div class="row">
+        <div class="col-xs-12">
+          <ol class="breadcrumb breadcrumbs-list" id="crumbs" aria-label="Breadcrumb"></ol>
+          <h1 class="page-header">Podcast Not Appearing</h1>
+          <p class="lead">Guided triage for <strong>Issue 1: Podcast not appearing in Canvas or the Podcast website</strong>.</p>
+          <dl class="dl-horizontal">
+            <dt>Owner at start</dt>
+            <dd>EdTech</dd>
+            <dt>Version</dt>
+            <dd>Issue 1 only · v0.1</dd>
+            <dt>Source</dt>
+            <dd>ETS Confluence and Robin’s instructions</dd>
+          </dl>
+        </div>
+      </div>
+
+      <section class="panel panel-default" aria-label="Triage step" aria-live="polite">
+        <div class="panel-heading">
+          <span class="label label-primary" id="team">EdTech</span>
+          <h2 class="panel-title" id="title">Where is the podcast missing?</h2>
+        </div>
+        <div class="panel-body">
+          <div id="body"></div>
+          <div id="choices"></div>
+        </div>
+        <div class="panel-footer">
+          <button class="btn btn-default" id="backButton" type="button">Back</button>
+          <button class="btn btn-default" id="restartButton" type="button">Restart</button>
+          <button class="btn btn-default" id="printButton" type="button">Print</button>
+        </div>
+      </section>
+
+      <div class="well">
+        <details id="refsPanel">
+          <summary>References</summary>
+          <ul id="refs"></ul>
+        </details>
+      </div>
+
+      <noscript>
+        <div class="alert alert-warning">This guided triage page requires JavaScript.</div>
+      </noscript>
+    </div>
   </main>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-8">
+          <p>
+            <span>UC San Diego 9500 Gilman Dr. La Jolla, CA 92093 (858) 534-2230</span><br>
+            <span>Copyright © 2026 Regents of the University of California. All rights reserved.</span>
+          </p>
+          <ul class="footer-links">
+            <li><a href="https://github.com/r6martin/public/tree/main/lecture-capture">GitHub source</a></li>
+          </ul>
+        </div>
+        <div class="col-sm-4">
+          <a href="https://ucsd.edu">
+            <img src="https://cdn.ucsd.edu/developer/decorator/5.0.2/img/ucsd-footer-logo-white.png" alt="UC San Diego homepage" class="img-responsive footer-logo" />
+          </a>
+        </div>
+      </div>
+    </div>
+  </footer>
 
   <script>
     const steps = {
@@ -398,7 +218,7 @@
             <li>For repeated or long-running EKS failures, ATI should inspect the production Splunk queries for launcher, child postprocessor, and init-container logs documented on the EKS page.</li>
             <li>If the recording was processed but has a dualcast playback defect in Kaltura, test whether the non-dualcast versions play from the icons above the player; otherwise use the Issue 2 workflow.</li>
           </ol>
-          <div class="note">If EKS remediation succeeds, return to A1 to confirm the Kaltura upload.</div>
+          <div class="well well-sm"><strong>Note:</strong> If EKS remediation succeeds, return to A1 to confirm the Kaltura upload.</div>
         `,
         choices: [
           { label: "Post-processing is complete and usable", next: "a3" },
@@ -421,7 +241,7 @@
             <li>If the directory is absent or incomplete, inspect the event in the SMP’s Recording Calendar. Use <strong>Retransfer</strong> to the current publish destination or manually publish the recording directory from the SMP.</li>
             <li>If many recorders are affected, escalate to ATI for <code>checkQumulo.pl</code>.</li>
           </ol>
-          <div class="note">If transfer remediation succeeds, return to A2 after confirming that the transfer is complete and the recording has usable content.</div>
+          <div class="well well-sm"><strong>Note:</strong> If transfer remediation succeeds, return to A2 after confirming that the transfer is complete and the recording has usable content.</div>
         `,
         choices: [
           { label: "Recording published to Qumulo", next: "a4" },
@@ -592,7 +412,7 @@
         title: "C — After quarter concluded",
         team: "Deprecated · EdTech/ATS legacy",
         body: `
-          <div class="note">As of Fall 2026, this workflow is deprecated. Direct instructors to <a href="https://mediaspace.ucsd.edu" target="_blank" rel="noopener">MediaSpace</a> for sharing after the quarter has ended. MediaSpace is part of the Kaltura service.</div>
+          <div class="well well-sm"><strong>Note:</strong> As of Fall 2026, this workflow is deprecated. Direct instructors to <a href="https://mediaspace.ucsd.edu" target="_blank" rel="noopener">MediaSpace</a> for sharing after the quarter has ended. MediaSpace is part of the Kaltura service.</div>
           <h3>Legacy process</h3>
           <ol>
             <li>Verify whether the instructor wants access restored for everyone or only one student.</li>
@@ -673,8 +493,8 @@
       (step.choices || []).forEach(choice => {
         const button = document.createElement("button");
         button.type = "button";
-        button.className = "choice";
-        button.innerHTML = `<span>${choice.label}</span><span aria-hidden="true">→</span>`;
+        button.className = "btn btn-primary btn-block text-left";
+        button.textContent = choice.label;
         button.addEventListener("click", () => {
           history.push(currentStep);
           render(choice.next);
@@ -711,16 +531,13 @@
       const path = [...history, currentStep];
       path.forEach((stepId, index) => {
         const isCurrent = index === path.length - 1;
-        const item = document.createElement("span");
-        item.className = isCurrent ? "crumb current" : "crumb";
+        const item = document.createElement("li");
+        item.className = isCurrent ? "active" : "";
         item.textContent = steps[stepId].title;
-        crumbs.appendChild(item);
-        if (!isCurrent) {
-          const separator = document.createElement("span");
-          separator.className = "crumb-separator";
-          separator.textContent = "→";
-          crumbs.appendChild(separator);
+        if (isCurrent) {
+          item.setAttribute("aria-current", "page");
         }
+        crumbs.appendChild(item);
       });
     }
 
