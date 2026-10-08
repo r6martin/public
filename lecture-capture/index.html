@@ -145,8 +145,7 @@
         choices: [
           { label: "Everywhere", next: "a0" },
           { label: "Podcast website only", next: "b1" },
-          { label: "Canvas Media Gallery only", next: "b3" },
-          { label: "After the quarter concluded", next: "c" }
+          { label: "Canvas Media Gallery only", next: "b3" }
         ]
       },
       a0: {
@@ -310,6 +309,7 @@
         title: "B1 — Current-term visibility and publishing controls",
         team: "EdTech",
         body: `
+          <div class="well well-sm"><strong>Post-quarter note:</strong> As of Fall 2026, after-quarter access is a legacy process. Direct instructors to <a href="https://mediaspace.ucsd.edu" target="_blank" rel="noopener">MediaSpace</a> for sharing after the quarter has ended. MediaSpace is part of the Kaltura service.</div>
           <ol>
             <li>In <a href="https://podcast.ucsd.edu/admin/Podcasts.aspx" target="_blank" rel="noopener">Manage Podcasts</a>, verify the podcast is <code>Available</code>.</li>
             <li>Verify the class password/access restriction is appropriate.</li>
@@ -416,31 +416,6 @@
         ],
         refs: [
           { label: "Admin Tools", url: "https://ucsdcollab.atlassian.net/wiki/spaces/ETS/pages/49776925/Podcast+Admin+Tools%3A+Manage+Requests%2C+Rooms%2C+Recordings%2C+and+Publishing" }
-        ]
-      },
-      c: {
-        title: "C — After quarter concluded",
-        team: "Deprecated · EdTech/ATS legacy",
-        body: `
-          <div class="well well-sm"><strong>Note:</strong> As of Fall 2026, this workflow is deprecated. Direct instructors to <a href="https://mediaspace.ucsd.edu" target="_blank" rel="noopener">MediaSpace</a> for sharing after the quarter has ended. MediaSpace is part of the Kaltura service.</div>
-          <h3>Legacy process</h3>
-          <ol>
-            <li>Verify whether the instructor wants access restored for everyone or only one student.</li>
-            <li>If one student only, the documented alternatives are:
-              <ul>
-                <li>Provide the instructor a download link to the archive.</li>
-                <li>Use Canvas <strong>Extended Course Access</strong> if the recordings were not deleted from Kaltura.</li>
-              </ul>
-            </li>
-            <li>To restore for everyone, verify an archive exists on <strong>Edit Podcast</strong>, restore from archive if needed, set the podcast <code>Available</code>, and set the primary agreement’s <strong>After Quarter</strong> setting to <strong>Keep Online</strong>.</li>
-            <li>To conclude access, set the primary agreement’s <strong>After Quarter</strong> setting and make the podcast unavailable, following the source page.</li>
-          </ol>
-        `,
-        choices: [
-          { label: "Done", next: "retest" }
-        ],
-        refs: [
-          { label: "Extend or Conclude podcast access", url: "https://ucsdcollab.atlassian.net/wiki/spaces/ETS/pages/49777730/Process%3A+Extend+or+Conclude+podcast+access+after+quarter+ends" }
         ]
       },
       issue2Exit: {
