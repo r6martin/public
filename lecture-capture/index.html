@@ -24,27 +24,27 @@
     <a class="sr-only" href="#main-content">Skip to main content</a>
     <section class="layout-title" aria-label="Lecture Capture Triage">
       <div class="layout-container container">
-        <a class="title-header title-header-large" href="/public/lecture-capture/">Lecture Capture Triage</a>
-        <a class="title-header title-header-short" href="/public/lecture-capture/">LC Triage</a>
+        <a class="title-header title-header-large" href="./">Lecture Capture Triage</a>
+        <a class="title-header title-header-short" href="./">LC Triage</a>
         <a class="title-logo" href="https://www.ucsd.edu">UC San Diego</a>
       </div>
     </section>
   </header>
 
-  <nav class="navbar navbar-default navbar-static-top" role="navigation" aria-label="Primary">
+  <nav class="navbar navbar-default navbar-static-top" aria-label="Primary">
     <div class="container">
       <div class="navbar-header">
         <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#site-nav" aria-expanded="false" aria-controls="site-nav">
           <span class="sr-only">Toggle navigation</span>
-          <div class="col-sm-1 mobile-nav-bars">
+          <span class="col-sm-1 mobile-nav-bars">
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
-          </div>
-          <div class="col-sm-1 mobile-nav-icon">MENU</div>
+          </span>
+          <span class="col-sm-1 mobile-nav-icon">MENU</span>
         </button>
         <div class="col-sm-4 pull-right visible-xs-block">
-          <img src="https://cdn.ucsd.edu/developer/decorator/5.0.2/img/ucsd-footer-logo-white.png" alt="UC San Diego" class="img-responsive header-logo" />
+          <img src="https://cdn.ucsd.edu/developer/decorator/5.0.2/img/ucsd-footer-logo-white.png" alt="UC San Diego" class="img-responsive header-logo">
         </div>
       </div>
       <div class="collapse navbar-collapse" id="site-nav">
@@ -55,7 +55,7 @@
     </div>
   </nav>
 
-  <main class="layout-main" id="main-content" role="main">
+  <main class="layout-main" id="main-content">
     <div class="container">
       <div class="row">
         <div class="col-xs-12">
@@ -73,14 +73,14 @@
         </div>
       </div>
 
-      <section class="panel panel-default" aria-label="Triage step" aria-live="polite">
+      <section class="panel panel-default" aria-labelledby="title">
         <div class="panel-heading">
           <span class="label label-primary" id="team">EdTech</span>
-          <h2 class="panel-title" id="title">Where is the podcast missing?</h2>
+          <h2 class="panel-title" id="title" tabindex="-1">Where is the podcast missing?</h2>
         </div>
         <div class="panel-body">
           <div id="body"></div>
-          <div id="choices"></div>
+          <div id="choices" role="group" aria-label="Triage choices"></div>
         </div>
         <div class="panel-footer">
           <button class="btn btn-default" id="backButton" type="button">Back</button>
@@ -116,7 +116,7 @@
         </div>
         <div class="col-sm-4">
           <a href="https://ucsd.edu">
-            <img src="https://cdn.ucsd.edu/developer/decorator/5.0.2/img/ucsd-footer-logo-white.png" alt="UC San Diego homepage" class="img-responsive footer-logo" />
+            <img src="https://cdn.ucsd.edu/developer/decorator/5.0.2/img/ucsd-footer-logo-white.png" alt="UC San Diego homepage" class="img-responsive footer-logo">
           </a>
         </div>
       </div>
@@ -480,7 +480,7 @@
     const refsList = document.getElementById("refs");
     const backButton = document.getElementById("backButton");
 
-    function render(stepId) {
+    function render(stepId, focusStep = false) {
       const step = steps[stepId];
       currentStep = stepId;
 
@@ -497,7 +497,7 @@
         button.textContent = choice.label;
         button.addEventListener("click", () => {
           history.push(currentStep);
-          render(choice.next);
+          render(choice.next, true);
           window.scrollTo({ top: 0, behavior: "smooth" });
         });
         choices.appendChild(button);
@@ -524,6 +524,9 @@
 
       backButton.disabled = history.length === 0;
       renderCrumbs();
+      if (focusStep) {
+        title.focus();
+      }
     }
 
     function renderCrumbs() {
@@ -544,12 +547,12 @@
     backButton.addEventListener("click", () => {
       if (!history.length) return;
       currentStep = history.pop();
-      render(currentStep);
+      render(currentStep, true);
     });
 
     document.getElementById("restartButton").addEventListener("click", () => {
       history = [];
-      render(startStep);
+      render(startStep, true);
       window.scrollTo({ top: 0, behavior: "smooth" });
     });
 
