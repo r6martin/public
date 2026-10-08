@@ -156,7 +156,7 @@
           <p>Compare it with:</p>
           <ul>
             <li><a href="https://podcast.ucsd.edu/admin/Podcasts.aspx" target="_blank" rel="noopener">Manage Podcasts</a> — agreement schedule.</li>
-            <li><a href="https://podcast.ucsd.edu/admin/rooms.aspx" target="_blank" rel="noopener">Manage Rooms / Manage Computers</a> — room schedule fetch and source address.</li>
+            <li><a href="https://podcast.ucsd.edu/admin/Rooms.aspx" target="_blank" rel="noopener">Manage Rooms</a> — room schedule fetch and source address.</li>
           </ul>
         `,
         choices: [
@@ -168,10 +168,11 @@
         ]
       },
       scheduleIssue: {
-        title: "Schedule mismatch found",
+        title: "Schedule mismatch — verify the agreement schedule",
         team: "EdTech",
         body: `
-          <p>Use the <strong>Podcast schedule not correct</strong> workflow before continuing Issue 1.</p>
+          <p><strong>PodcastSyncScheduleOfClasses</strong> does not contain existing recordings.</p>
+          <p>Open the affected class agreement in <a href="https://podcast.ucsd.edu/admin/Podcasts.aspx" target="_blank" rel="noopener">Manage Podcasts</a> and verify the schedule in the agreement against TSS/SAH data, using whichever is more recent.</p>
           <p>After the schedule has been corrected, return to A0 and recheck the user’s expectation against the system schedule.</p>
         `,
         choices: [
@@ -185,13 +186,13 @@
           <p>First allow for the documented multi-hour delay that can occur when Kaltura is slow to ingest recordings.</p>
           <h3>Status-page checks</h3>
           <ol>
-            <li>Use the <a href="https://podcast.ucsd.edu/admin/KalturaStatus.aspx" target="_blank" rel="noopener">Kaltura Status Page</a> to determine whether the problem affects many files or one file.</li>
+            <li>Use the <a href="https://podcast.ucsd.edu/admin/KalturaStatus.aspx" target="_blank" rel="noopener">Kaltura Upload Status</a> to determine whether the problem affects many files or one file.</li>
             <li><strong>Many files pending:</strong> check the EdTech Tools Known Errors and Updates channel. Treat this as a likely service outage or a <code>kaltura-sync</code> unhandled exception.</li>
             <li><strong>Many files for one class:</strong> check the agreement in <strong>Manage Podcasts → Manage Agreements</strong>. If <code>professor_name</code>, <code>username</code>, and <code>email</code> are blank, add an AD username for the course in <a href="https://podcast.ucsd.edu/admin/KalturaMappings.aspx" target="_blank" rel="noopener">Kaltura Mappings</a>. The fix may not upload until the next recording; if urgent, ATI can run a manual sync.</li>
-            <li><strong>Single lecture with an offline entry:</strong> click <strong>Redo</strong> on the Kaltura Status Page. If more than 24 hours have passed, escalate to ITS-KalturaVideo to redo it through the KMC.</li>
+            <li><strong>Single lecture with an offline entry:</strong> click <strong>Redo</strong> on Kaltura Upload Status. If more than 24 hours have passed, escalate to ITS-KalturaVideo to redo it through the KMC.</li>
           </ol>
           <h3>If the meeting is not listed</h3>
-          <p>Verify the course is listed in <a href="https://podcast.ucsd.edu/admin/KalturaMappings.aspx" target="_blank" rel="noopener">Kaltura Mappings</a>.</p>
+          <p>Verify the course is listed in <a href="https://podcast.ucsd.edu/admin/KalturaMappings.aspx" target="_blank" rel="noopener">Manage Kaltura Settings</a>.</p>
           <h3>If Pending has not progressed</h3>
           <p>After more than 15 minutes, and if ITS-KalturaVideo has not identified a Kaltura-side/KMC issue, ATI should check <code>~/log/kaltura-sync.log</code> on <code>lcs2-admin</code>.</p>
           <h3>If Running or Complete</h3>
@@ -222,7 +223,7 @@
         body: `
           <h3>Post-processing checks</h3>
           <ol>
-            <li>Use the <a href="https://podcast.ucsd.edu/admin/ExtronStatus.aspx" target="_blank" rel="noopener">Extron Postprocessing Status page</a> to verify that the meeting’s recording and post-processing completed and that the lecture link shows usable content.</li>
+            <li>Use the <a href="https://podcast.ucsd.edu/admin/ExtronStatus.aspx" target="_blank" rel="noopener">SMP Postprocess Status</a> to verify that the meeting’s recording and post-processing completed and that the lecture link shows usable content.</li>
             <li>If no recordings are processing at all, escalate to ATI to determine whether EKS processing failed. Use the <a href="https://ucsdcollab.atlassian.net/wiki/spaces/ETS/pages/3309994010/Post-processing+on+ITS+EKS+cluster" target="_blank" rel="noopener">Post-processing on ITS EKS cluster</a> page.</li>
             <li>For repeated or long-running EKS failures, ATI should inspect the production Splunk queries for launcher, child postprocessor, and init-container logs documented on the EKS page.</li>
             <li>If the recording was processed but has a dualcast playback defect in Kaltura, test whether the non-dualcast versions play from the icons above the player; otherwise use the Issue 2 workflow.</li>
@@ -272,7 +273,7 @@
             <li>If the meeting is absent, verify the agreement and recording schedule:
               <ul>
                 <li><a href="https://podcast.ucsd.edu/admin/Podcasts.aspx" target="_blank" rel="noopener">Manage Podcasts</a> — agreement schedule.</li>
-                <li><a href="https://podcast.ucsd.edu/admin/rooms.aspx" target="_blank" rel="noopener">Manage Rooms / Manage Computers</a> — schedule fetch and source address.</li>
+                <li><a href="https://podcast.ucsd.edu/admin/Rooms.aspx" target="_blank" rel="noopener">Manage Rooms</a> — schedule fetch and source address.</li>
               </ul>
               If the class time or room changed, use the <strong>Podcast schedule not correct</strong> workflow before continuing.
             </li>
@@ -353,7 +354,7 @@
         body: `
           <ol>
             <li>In <a href="https://podcast.ucsd.edu/admin/Podcasts.aspx" target="_blank" rel="noopener">Manage Podcasts → Edit Mappings</a>, add the new Canvas course mapping and remove the old one.</li>
-            <li>From <a href="https://podcast.ucsd.edu/admin/KalturaMappings.aspx" target="_blank" rel="noopener">Manage Kaltura Settings / Kaltura Mappings</a>, modify the Kaltura mapping and enter the correct LMS Course ID.</li>
+            <li>From <a href="https://podcast.ucsd.edu/admin/KalturaMappings.aspx" target="_blank" rel="noopener">Manage Kaltura Settings</a>, modify the Kaltura mapping and enter the correct LMS Course ID.</li>
             <li>Clear the existing Kaltura Categories and Kaltura Playlist fields so they are rebuilt on the next recording upload.</li>
             <li>Move completed recordings:
               <ul>
@@ -383,7 +384,7 @@
           </ul>
           <h3>Deleted from the course Media Gallery</h3>
           <ol>
-            <li>Open the <a href="https://podcast.ucsd.edu/admin/KalturaStatus.aspx" target="_blank" rel="noopener">Kaltura Status Page</a>.</li>
+            <li>Open <a href="https://podcast.ucsd.edu/admin/KalturaStatus.aspx" target="_blank" rel="noopener">Kaltura Upload Status</a>.</li>
             <li>Increase the number of days shown until the old file appears.</li>
             <li>Confirm the entry ID is red/strike-through, which marks the entry offline.</li>
             <li>Click <strong>Redo</strong> to clear the old entry/upload metadata.</li>
@@ -404,10 +405,10 @@
         body: `
           <p>Use this branch only when the recording successfully reached Kaltura but is not visible in the expected destination because of its mapping, entry state, or category/playlist assignment.</p>
           <ol>
-            <li>Use the <a href="https://podcast.ucsd.edu/admin/KalturaStatus.aspx" target="_blank" rel="noopener">Kaltura Status Page</a> to confirm that the recording has a valid Kaltura entry.</li>
-            <li>Use <a href="https://podcast.ucsd.edu/admin/KalturaMappings.aspx" target="_blank" rel="noopener">Kaltura Mappings</a> to verify the course, category, and playlist settings.</li>
+            <li>Use <a href="https://podcast.ucsd.edu/admin/KalturaStatus.aspx" target="_blank" rel="noopener">Kaltura Upload Status</a> to confirm that the recording has a valid Kaltura entry.</li>
+            <li>Use <a href="https://podcast.ucsd.edu/admin/KalturaMappings.aspx" target="_blank" rel="noopener">Manage Kaltura Settings</a> to verify the course, category, and playlist settings.</li>
             <li>If the category or playlist is missing or incorrect, update the mapping so future uploads publish correctly.</li>
-            <li>If the entry is offline, use <strong>Redo</strong> on the Kaltura Status Page, or escalate to ITS-KalturaVideo for KMC remediation.</li>
+            <li>If the entry is offline, use <strong>Redo</strong> on Kaltura Upload Status, or escalate to ITS-KalturaVideo for KMC remediation.</li>
           </ol>
         `,
         choices: [
